@@ -5,21 +5,38 @@ function ask_gpt() {
   };
 
   if (question != '') {
+    // Add chat element to chat container
+    add_chat_element(question, "User");
     $.ajax({
       url: "model/ask_gpt", // point to server-side URL
       dataType: "text", // what to expect back from server
       data: data,
       type: "post",
       success: function (response) {
-        alert(response, "success");
+        // alert(response, "success");
       },
       error: function (response) {
-        alert(response, "danger");
+        // alert(response, "danger");
       },
+      complete: function (response) {
+        // Add chat element to chat container
+        add_chat_element(response.responseText, "Bot");
+        document.getElementById("question").value = "";
+      }
     });
   } else {
     //   alert("Please select an image to upload!", "danger");
   }
+}
+
+function add_chat_element(text, type) {
+  var chat = document.getElementById("chat-container");
+  var element = document.createElement("div");
+  // element.classList.add("chat-" + type);
+  text = "<b>" + type + ": " + "</b>" + text
+  element.innerHTML = text;
+  chat.appendChild(element);
+  chat.scrollTop = chat.scrollHeight;
 }
 
 // Bootstrap alert

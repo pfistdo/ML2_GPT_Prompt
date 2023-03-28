@@ -1,6 +1,5 @@
 from flask import Flask, send_file, request
 import openai
-import os
 
 app = Flask(__name__, static_folder="web", static_url_path="/")
 
@@ -12,13 +11,10 @@ def hello_world():
 def ask_bot():
     if request.method == 'POST':
         input = request.form.get("query")
-        print(input)
         response = chatbot(input)
     return response
   
 def chatbot(input):
-
-
     openai.Model.list()
 
     messages = [{"role": "system", "content": "You are a helpful and kind AI assistant."}]
@@ -29,7 +25,6 @@ def chatbot(input):
         )
         reply = chat.choices[0].message.content
         messages.append({"role": "system", "content": reply})
-        print("Reply: ", reply)
         return reply
 
 if __name__ == "__main__":
