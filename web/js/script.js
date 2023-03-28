@@ -29,6 +29,20 @@ function ask_gpt() {
   }
 }
 
+function reset_gpt() {
+  $.ajax({
+    url: "model/ask_gpt/reset", // point to server-side URL
+    dataType: "text", // what to expect back from server
+    type: "post",
+    success: function (response) {
+      alert(response, "success");
+    },
+    error: function (response) {
+      alert(response, "danger");
+    }
+  });
+}
+
 function add_chat_element(text, type) {
   var chat = document.getElementById("chat-container");
   var element = document.createElement("div");
