@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chatbot Interface</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Chatbot</h1>
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-body">
+            <div id="chatbot" class="chatbot"></div>
+            <form id="input-form">
+              <input type="text" id="input-text" class="form-control" placeholder="Type your message...">
+              <button type="submit" class="btn btn-primary mt-2">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.8.5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@4.3.0/dist/universal-sentence-encoder.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/qna@1.3.0/dist/qna.min.js"></script>
+  <script>
+    // Initialize the QnA model
+    const model = qna.load();
+
+    // Function to send a message to the chatbot
+    const sendMessage = async () => {
+      const input = document.getElementById("input-text").value;
+      if (!input) {
+        return;
+      }
+
+      const container = document.createElement("div");
+      container.classList.add("container");
+      const userMessage = document.createElement("div");
+      userMessage.classList.add("row");
+      userMessage.innerHTML = `
+        <div class="col-md-8 offset-md-4">
+          <div class="alert alert-secondary" role="alert">
+            ${input}
+          </div>
+        </div>
+      `;
+      container.appendChild(userMessage);
+      document.getElementById("chatbot").appendChild(container);
+
+      const context = { question: input };
+      const answers = await model.findAnswers(input, context);
+
+      const botMessage = document.createElement("div");
+      botMessage.classList.add("row");
+      botMessage.innerHTML = `
+        <div class="col-md-8">
+          <div class="alert alert-primary" role="alert">
+            ${answers[0].text}
+          </div>
+        </div>
+      `;
+      container.appendChild(botMessage);
+      document.getElementById("chatbot").appendChild(container);
+
+      document.getElementById("input-text").value = "";
+    };
+
+    // Event listener for form submission
+    document.getElementById("input-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      sendMessage();
+    });
+  </script>
+</body>
+</html>
