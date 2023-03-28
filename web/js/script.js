@@ -1,12 +1,21 @@
 function ask_gpt() {
-  var question = document.getElementById("question").value;
+  var question = document.getElementById("question");
   var data = {
-    query: question
+    query: question.value
   };
 
   if (question != '') {
     // Add chat element to chat container
-    add_chat_element(question, "User");
+    add_chat_element(question.value, "User");
+
+    // disable question input
+    question.disabled = true
+
+    // add spinner to button
+    var btn = document.getElementById("ask-btn");
+    btn.classList.add("button--loading");
+    btn.textContent = ''
+
     $.ajax({
       url: "model/ask_gpt", // point to server-side URL
       dataType: "text", // what to expect back from server
@@ -22,6 +31,11 @@ function ask_gpt() {
         // Add chat element to chat container
         add_chat_element(response.responseText, "Bot");
         document.getElementById("question").value = "";
+        // remove spinner from button
+        btn.classList.remove("button--loading")
+        btn.textContent = 'Ask GPT'
+        // enable question input
+        question.disabled = false
       }
     });
   } else {

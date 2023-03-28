@@ -42,13 +42,23 @@
         <div class="col-12">
           <h1>Chatbot</h1>
           <div id="chat-container"></div>
+          <button class="btn btn-secondary fix-width float-end mb-1" type="button" onclick="reset_gpt()" id="reset-btn">Reset GPT</button>
           <div class="input-group">
-            <button class="btn btn-primary fix-width" type="button" onclick="ask_gpt()" id="ask-btn">Ask GPT</button>
             <input type="text" class="form-control" id="question" >
+            <button class="btn btn-primary fix-width" type="button" onclick="ask_gpt()" id="ask-btn">Ask GPT</button>
           </div>
-          <button class="btn btn-secondary fix-width" type="button" onclick="reset_gpt()" id="reset-btn">Reset GPT</button>
         </div>
       </div>
     </div>
+
+    <script>
+      // Enter key listener for input field
+      var question_field = document.getElementById("question");
+      question_field.addEventListener("keydown", function (e) {
+       if (e.key === "Enter") {  
+         ask_gpt()
+       }
+     });
+   </script>
   </body>
 </html>
