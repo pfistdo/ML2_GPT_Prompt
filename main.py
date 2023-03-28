@@ -1,6 +1,11 @@
 import openai
 
-openai.api_key = "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"
+
+# Read the API key from a file
+with open("api_key.txt", "r") as f:
+    openai.api_key = f.read()
+
+
 openai.Model.list()
 
 messages = [{"role": "system", "content": "You are a helpful and kind AI assistant."}]
